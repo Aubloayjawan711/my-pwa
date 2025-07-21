@@ -1,60 +1,32 @@
-// كشف إذا كان التطبيق يعمل على localhost
-const isLocalhost = Boolean(
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1' ||
-  window.location.hostname === ''
-);
+const installBtn = document.getElementById('installBtn');
+let deferredPrompt;
 
-function setupPWA() {
-  if (!isLocalhost && window.location.protocol !== 'https:') {
-    console.warn('PWA تحتاج HTTPS للعمل بكامل ميزاتها');
-    return;
-  }
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('📌 beforeinstallprompt fired!');
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'block';
+});
 
-  const installButton = document.getElementById('installButton');
-  
-  let deferredPrompt;
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log('✅ نتيجة التثبيت:', outcome);
+  deferredPrompt = null;
+  installBtn.style.display = 'none';
+});
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installButton.style.display = 'block';
-    
-    setTimeout(() => {
-      if (deferredPrompt) {
-        installButton.style.display = 'none';
-      }
-    }, 30000);
-  });
+window.addEventListener('appinstalled', () => {
+  console.log('🎉 تم تثبيت التطبيق!');
+  installBtn.style.display = 'none';
+});
 
-  installButton.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
-    
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log('نتيجة التثبيت:', outcome);
-    deferredPrompt = null;
-    installButton.style.display = 'none';
-  });
-
-  window.addEventListener('appinstalled', () => {
-    console.log('تم التثبيت بنجاح');
-    installButton.style.display = 'none';
-  });
-}
-
-// تسجيل Service Worker فقط على localhost أو HTTPS
-if ('serviceWorker' in navigator && (isLocalhost || window.location.protocol === 'https:')) {
+// تسجيل Service Worker
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('Service Worker مسجل');
-        setupPWA();
-      })
-      .catch(err => {
-        console.error('فشل تسجيل Service Worker:', err);
-      });
+    navigator.serviceWorker.register('/my-pwa/sw.js')
+      .then(reg => console.log('✅ Service Worker مسجل', reg))
+      .catch(err => console.error('❌ فشل تسجيل Service Worker:', err));
   });
-} else {
-  setupPWA();
 }

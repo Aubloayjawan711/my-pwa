@@ -2,11 +2,19 @@ const CACHE_NAME = 'my-shop-cache-v1';
 const urlsToCache = [
   '/my-pwa/',
   '/my-pwa/index.html',
+  '/my-pwa/style.css',
   '/my-pwa/app.js',
   '/my-pwa/manifest.json',
-  '/my-pwa/icons/icon-72x72.png',
-  '/my-pwa/icons/icon-192x192.png',
-  '/my-pwa/icons/icon-512x512.png'
+  '/my-pwa/أيقونة-48x48.png',
+  '/my-pwa/أيقونة-72x72.png',
+  '/my-pwa/أيقونة-96x96.png',
+  '/my-pwa/أيقونة-128x128.png',
+  '/my-pwa/أيقونة-144x144.png',
+  '/my-pwa/أيقونة-152x152.png',
+  '/my-pwa/أيقونة-192x192.png',
+  '/my-pwa/أيقونة-256x256.png',
+  '/my-pwa/أيقونة-384x384.png',
+  '/my-pwa/أيقونة-512x512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -19,7 +27,8 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    caches.match(event.request).then(
+      response => response || fetch(event.request)
+    )
   );
 });
