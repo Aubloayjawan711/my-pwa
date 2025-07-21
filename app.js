@@ -22,7 +22,6 @@ window.addEventListener('appinstalled', () => {
   installBtn.style.display = 'none';
 });
 
-// تسجيل Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/my-pwa/sw.js')
