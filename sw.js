@@ -1,12 +1,12 @@
 const CACHE_NAME = 'my-shop-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/app.js',
-  '/manifest.json',
-  '/icons/icon-72x72.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/my-pwa/',
+  '/my-pwa/index.html',
+  '/my-pwa/app.js',
+  '/my-pwa/manifest.json',
+  '/my-pwa/icons/icon-72x72.png',
+  '/my-pwa/icons/icon-192x192.png',
+  '/my-pwa/icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {
